@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build:live",
-    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./index.ts"
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./app/index.ts",
+    "eslint": "eslint . --ext .js,.ts",
+    "lint-staged": "lint-staged",
+    "lint-staged:js": "eslint --ext .js,.ts",
+    "fix": "prettier --config --write app/index.ts"
   },
   "repository": {
     "type": "git",
@@ -21,17 +25,34 @@
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
     "@types/node": "^12.12.14",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
     "cz-conventional-changelog": "^3.0.2",
     "cz-customizable": "^6.2.0",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-ts": "^4.0.1",
+    "eslint-plugin-prettier": "^3.1.1",
     "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
     "nodemon": "^2.0.1",
+    "prettier": "^1.19.1",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.3"
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run lint-staged"
     }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts,less,md,json}": [
+      "prettier --write",
+      "git add"
+    ],
+    "**/*.{js,jsx}": "npm run lint-staged:js",
+    "**/*.{js,ts,tsx}": "npm run lint-staged:js"
   },
   "config": {
     "commitizen": {
